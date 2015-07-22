@@ -32,10 +32,10 @@ TPlanePoints GetPlanePoints(const TVector3f* _kpPoints, const size_t _kNumPoints
 	const TVector3f kCenter = ScalarMultiply(TVector3f(), Temp, (1.0f / (float)_kNumPoints));
 
 	// Find Tangent
-	const TVector3f kTangent = Normalize(TVector3f(), Subtract(TVector3f(), _kpPoints[1], _kpPoints[0]));
+	const TVector3f kTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), Subtract(TVector3f(), _kpPoints[1], _kpPoints[0])), 128.0f);
 
 	// Find BiTangent
-	const TVector3f kBiTangent = Normalize(TVector3f(), CrossProduct(TVector3f(), kNormal, kTangent));
+	const TVector3f kBiTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), CrossProduct(TVector3f(), kNormal, kTangent)), 128.0f);
 
 	PlanePoints.m_A = Add(TVector3f(), kCenter, kBiTangent);
 	PlanePoints.m_B = kCenter;
