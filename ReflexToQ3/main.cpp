@@ -14,6 +14,7 @@ struct TPlanePoints
 	TVector3f m_A;
 	TVector3f m_B;
 	TVector3f m_C;
+	std::string m_material;
 };
 
 TPlanePoints GetPlanePoints(const TVector3f* _kpPoints, const size_t _kNumPoints)
@@ -54,7 +55,9 @@ std::vector<TPlanePoints> GetBrushPlanes(const TBrush& _krBrush)
 		{
 			Verts[i] = _krBrush.m_Vertices[krFace.m_Indices[i]];
 		}
-		Planes.push_back(GetPlanePoints(Verts.data(), Verts.size()));
+		TPlanePoints PP = GetPlanePoints(Verts.data(), Verts.size());
+		PP.m_material = krFace.m_Material;
+		Planes.push_back(PP);
 	}
 
 	return(Planes);
@@ -73,7 +76,14 @@ std::string GetBrushString(const TBrush& _krBrush)
 			ssOutput << "( " << krPlane.m_A.m_fX << " " << krPlane.m_A.m_fZ << " " << krPlane.m_A.m_fY << " ) ";
 			ssOutput << "( " << krPlane.m_B.m_fX << " " << krPlane.m_B.m_fZ << " " << krPlane.m_B.m_fY << " ) ";
 			ssOutput << "( " << krPlane.m_C.m_fX << " " << krPlane.m_C.m_fZ << " " << krPlane.m_C.m_fY << " ) ";
-			ssOutput << "common/caulk 0 0 0 0.500000 0.500000 0 4 0" << std::endl;
+			if(krPlane.m_material.length())
+			{
+				ssOutput << krPlane.m_material << " 0 0 0 0.500000 0.500000 0 4 0" << std::endl;
+			}
+			else
+			{
+				ssOutput << "common/caulk 0 0 0 0.500000 0.500000 0 4 0" << std::endl;
+			}
 		}
 		ssOutput << "}" << std::endl;
 	}
