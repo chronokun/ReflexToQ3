@@ -33,10 +33,10 @@ TPlanePoints GetPlanePoints(const TVector3f* _kpPoints, const size_t _kNumPoints
 	const TVector3f kCenter = ScalarMultiply(TVector3f(), Temp, (1.0f / (float)_kNumPoints));
 
 	// Find Tangent
-	const TVector3f kTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), Subtract(TVector3f(), _kpPoints[1], _kpPoints[0])), 128.0f);
+	const TVector3f kTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), Subtract(TVector3f(), _kpPoints[1], _kpPoints[0])), 8192.0f);
 
 	// Find BiTangent
-	const TVector3f kBiTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), CrossProduct(TVector3f(), kNormal, kTangent)), 128.0f);
+	const TVector3f kBiTangent = ScalarMultiply(TVector3f(), Normalize(TVector3f(), CrossProduct(TVector3f(), kNormal, kTangent)), 8192.0f);
 
 	PlanePoints.m_A = Add(TVector3f(), kCenter, kBiTangent);
 	PlanePoints.m_B = kCenter;
@@ -78,11 +78,11 @@ std::string GetBrushString(const TBrush& _krBrush)
 			ssOutput << "( " << krPlane.m_C.m_fX << " " << krPlane.m_C.m_fZ << " " << krPlane.m_C.m_fY << " ) ";
 			if(krPlane.m_material.length())
 			{
-				ssOutput << krPlane.m_material << " 0 0 0 0.500000 0.500000 0 4 0" << std::endl;
+				ssOutput << krPlane.m_material << " 0 0 0 0.500000 0.500000" << std::endl;
 			}
 			else
 			{
-				ssOutput << "common/caulk 0 0 0 0.500000 0.500000 0 4 0" << std::endl;
+				ssOutput << "common/caulk 0 0 0 0.500000 0.500000" << std::endl;
 			}
 		}
 		ssOutput << "}" << std::endl;
