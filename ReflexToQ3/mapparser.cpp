@@ -140,7 +140,7 @@ EParserState CMapParser::ParseBrush(const std::string _Line)
 
 EParserState CMapParser::ParseVertex(const std::string _Line)
 {
-	const size_t kszLineSize = 256;
+	const size_t kszLineSize = 2048;
 	char pcLine[kszLineSize];
 	const char* kpcDelim  = " \t";
 	char* pcToken;
@@ -184,7 +184,7 @@ EParserState CMapParser::ParseVertex(const std::string _Line)
 
 EParserState CMapParser::ParseFace(const std::string _Line)
 {
-	const size_t kszLineSize = 256;
+	const size_t kszLineSize = 2048;
 	char pcLine[kszLineSize];
 	const char* kpcDelim  = " \t";
 	char* pcToken;
@@ -194,6 +194,8 @@ EParserState CMapParser::ParseFace(const std::string _Line)
 	pcToken = strtok_s(pcLine, kpcDelim, &pcContext);
 
 	int iTokenNum = 0;
+
+	std::string material;
 
 	std::vector<int> Indices;
 	while(pcToken != nullptr)
@@ -209,7 +211,7 @@ EParserState CMapParser::ParseFace(const std::string _Line)
 				return(PARSERSTATE_BRUSH);
 			}
 		}
-		else if(iTokenNum < 9)
+		else
 		{
 			if(std::isdigit(pcToken[0], std::locale()) || pcToken[0] == '-')
 			{
@@ -218,7 +220,7 @@ EParserState CMapParser::ParseFace(const std::string _Line)
 			}
 			else
 			{
-				return(PARSERSTATE_BRUSH);
+				material = pcToken;
 			}
 		}
 
@@ -228,6 +230,7 @@ EParserState CMapParser::ParseFace(const std::string _Line)
 	
 	TFace Face;
 	Face.m_Indices = Indices;
+	Face.m_Material = material;
 	this->m_WorldSpawn.m_Brushes[this->m_WorldSpawn.m_Brushes.size()-1].m_Faces.push_back(Face);
 	return(PARSERSTATE_FACE);
 }
